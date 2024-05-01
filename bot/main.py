@@ -1,11 +1,13 @@
 from dotenv import load_dotenv
+
 load_dotenv()
 
 from telegram import Update
 from telegram.ext import Application
 
 from bot.main_menu import main_menu_handler
-from common.constants import BOT_TOKEN
+from bot.common.utils import setup_logger
+from bot.common.constants import BOT_TOKEN
 
 
 def main() -> None:
@@ -15,5 +17,5 @@ def main() -> None:
 
 
 if __name__ == '__main__':
+    setup_logger()
     main()
-
