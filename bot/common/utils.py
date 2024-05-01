@@ -1,7 +1,7 @@
 import logging
 
 
-def only(something) -> str:
+def ONLY(something) -> str:
     return "^" + str(something) + "$"
 
 

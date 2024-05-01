@@ -9,7 +9,7 @@ from telegram.ext import (
 )
 
 from bot.common.constants import STATE
-from bot.common.utils import only
+from bot.common.utils import ONLY
 
 
 async def battle_ship_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
@@ -22,7 +22,7 @@ async def battle_ship_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
 
 
 battle_ship_handler = ConversationHandler(
-    entry_points=[CallbackQueryHandler(battle_ship_menu, pattern=only(STATE.BATTLE_SHIP))],
+    entry_points=[CallbackQueryHandler(battle_ship_menu, pattern=ONLY(STATE.BATTLE_SHIP))],
     states={
         # EMPTY STATES
     },

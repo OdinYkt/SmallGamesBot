@@ -11,7 +11,7 @@ from telegram.ext import (
 )
 
 from bot.common.constants import STATE
-from bot.common.utils import only
+from bot.common.utils import ONLY
 
 
 async def tic_tac_toe_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
@@ -24,7 +24,7 @@ async def tic_tac_toe_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
 
 
 tic_tac_toe_handler = ConversationHandler(
-    entry_points=[CallbackQueryHandler(tic_tac_toe_menu, pattern=only(STATE.TIK_TAC_TOE))],
+    entry_points=[CallbackQueryHandler(tic_tac_toe_menu, pattern=ONLY(STATE.TIK_TAC_TOE))],
     states={
         # EMPTY STATES
     },
