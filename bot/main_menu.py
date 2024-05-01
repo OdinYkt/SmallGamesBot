@@ -24,10 +24,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     )
     buttons = [
         [
-            InlineKeyboardButton(text="Крестики-Нолики", callback_data=str(STATE.TIK_TAC_TOE)),
+            InlineKeyboardButton(text="Крестики-Нолики", callback_data=STATE.TIK_TAC_TOE),
         ],
         [
-            InlineKeyboardButton(text="Морской бой", callback_data=str(STATE.BATTLE_SHIP))
+            InlineKeyboardButton(text="Морской бой", callback_data=STATE.BATTLE_SHIP)
         ],
     ]
     keyboard = InlineKeyboardMarkup(buttons)
@@ -37,6 +37,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         await update.callback_query.edit_message_text(text=text, reply_markup=keyboard)
     else:
         await update.message.reply_text(text=text, reply_markup=keyboard)
+
+    context.user_data[CONTEXT.START_OVER] = False
     return STATE.SELECTING_GAMES
 
 

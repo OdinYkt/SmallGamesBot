@@ -17,7 +17,9 @@ async def battle_ship_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         "Морской бой. В разработке..."
     )
 
+    await update.callback_query.answer()
     await update.effective_user.send_message(text=text)
+
     return STATE.BATTLE_SHIP
 
 
