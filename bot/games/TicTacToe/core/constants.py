@@ -1,9 +1,9 @@
 from enum import Enum
-from typing import Union, Optional
+from typing import Union, Optional, List
 from dataclasses import dataclass
 
 
-EMPTY = '_'
+EMPTY: str = '_'
 SIZE = 3
 
 
@@ -11,8 +11,27 @@ class Player(Enum):
     PLAYER_1 = 'X'
     PLAYER_2 = 'O'
 
-    def __repr__(self):
-        return f"'{self.value}'"
+    def __str__(self) -> str:
+        return f"{self.value}"
+
+    def __repr__(self) -> str:
+        return str(self)
+
+
+CELL = Union[Player, EMPTY]
+
+
+@dataclass
+class Move:
+    x: int
+    y: int
+    player: CELL = EMPTY
+
+    def __str__(self) -> str:
+        return f"'{self.player}'"
+
+    def __repr__(self) -> str:
+        return str(self)
 
 
 class Direction(Enum):
@@ -23,20 +42,18 @@ class Direction(Enum):
 
 
 @dataclass
-class Move:
-    x: int
-    y: int
-
-
-@dataclass
 class WinResult:
     winner: Player
     direction: Direction
-    index: Optional[int] = None
+    cells: List[Move]
 
     def have_winner(self) -> bool:
         return bool(self.winner)
 
 
-class Types:
-    CELL = Union[Player, EMPTY]
+@dataclass
+class DrawResult:
+    ...
+
+
+GAME_RESULT = Union[WinResult, DrawResult]

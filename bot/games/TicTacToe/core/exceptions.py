@@ -1,24 +1,24 @@
-from .constants import Player, Move, SIZE
+from .constants import Move, SIZE
 
 
 class WrongMoveException(Exception):
-    def __init__(self, player: Player, move: Move, reason: str):
+    def __init__(self, move: Move, reason: str):
+        super(WrongMoveException, self).__init__()
         self.reason = reason
-        self.player = player
         self.move = move
 
     def __str__(self):
-        return f"{self.reason} | {self.player} | {self.move}"
+        return f"{self.reason} | x={self.move.x} y={self.move.y} | Player={self.move.player}"
 
     def __repr__(self):
         return str(self)
 
 
 class CellMarkedException(WrongMoveException):
-    def __init__(self, player: Player, move: Move):
-        super().__init__(player, move, reason="Cell is already marked!")
+    def __init__(self, move: Move):
+        super().__init__(move, reason="Cell is already marked!")
 
 
 class OutOfFieldException(WrongMoveException):
-    def __init__(self, player: Player, move: Move):
-        super().__init__(player, move, reason=f"Move coordinates out of field! Field size: {SIZE}")
+    def __init__(self, move: Move):
+        super().__init__(move, reason=f"Move coordinates out of field! Field size: {SIZE}")

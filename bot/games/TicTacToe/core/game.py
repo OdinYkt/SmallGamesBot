@@ -1,13 +1,14 @@
-from typing import Optional, List
+from typing import Optional, List, NoReturn
 
 from .constants import (
     EMPTY,
     SIZE,
     Player,
-    Types,
     WinResult,
     Direction,
     Move,
+    DrawResult,
+    GAME_RESULT,
 )
 from .exceptions import (
     CellMarkedException,
@@ -17,7 +18,7 @@ from .exceptions import (
 
 class TicTacToeGame:
     def __init__(self):
-        self.field = [[EMPTY]*SIZE for i in range(SIZE)]
+        self.field = self._get_empty_field(SIZE)
         self._directions = {
             Direction.row: self.row,
             Direction.column: self.column,
@@ -27,71 +28,84 @@ class TicTacToeGame:
             Direction.diagonal_right_left: self.diagonal_right_left,
         }
 
-    def row(self, index: int) -> List[Types.CELL]:
+    def row(self, index: int) -> List[Move]:
         return self.field[index]
 
-    def column(self, index: int) -> List[Types.CELL]:
+    def column(self, index: int) -> List[Move]:
         return [row[index] for row in self.field]
 
-    # TODO
-    #   to one method?
-    def diagonal_left_right(self) -> List[Types.CELL]:
+    def diagonal_left_right(self) -> List[Move]:
         return [row[i] for i, row in enumerate(self.field)]
 
-    def diagonal_right_left(self) -> List[Types.CELL]:
+    def diagonal_right_left(self) -> List[Move]:
         return [row[SIZE - 1 - i] for i, row in enumerate(self.field)]
-    ###
 
-    def make_move(self, player: Player, move: Move) -> None:
+    def make_move(self, move: Move) -> Optional[NoReturn]:
         if move.x < 0 or move.y < 0 or move.x >= SIZE or move.y >= SIZE:
-            raise OutOfFieldException(player=player, move=move)
+            raise OutOfFieldException(move=move)
 
-        if self.field[move.x][move.y] != EMPTY:
-            raise CellMarkedException(player=player, move=move)
-        self.field[move.x][move.y] = player
+        if self.field[move.x][move.y].player != EMPTY:
+            raise CellMarkedException(move=move)
+        self.field[move.x][move.y] = move
+
+    def get_result(self) -> Optional[GAME_RESULT]:
+        """Return result of game or None"""
+        win_result = self.winner
+        if win_result:
+            return win_result
+        if not self.have_empty_cells():
+            return DrawResult()
+        return
 
     @property
     def winner(self) -> Optional[WinResult]:
-        """Return winner player or None or draw"""
+        """Return winner player or None"""
 
         for direction, getter in self._directions.items():
             for index in range(SIZE):
+                cells = getter(index)    # type:ignore
                 result = WinResult(
-                    winner=self._get_winner(getter(index)),     # type:ignore
+                    winner=self._get_winner(cells),
                     direction=direction,
-                    index=index)
+                    cells=cells
+                )
                 if result.have_winner():
                     return result
 
         for diagonal, getter in self._diagonals.items():
+            cells = getter()
             result = WinResult(
-                winner=self._get_winner(getter()),
-                direction=diagonal
+                winner=self._get_winner(cells),
+                direction=diagonal,
+                cells=cells
             )
             if result.have_winner():
                 return result
 
     def have_empty_cells(self) -> bool:
         for i in range(SIZE):
-            for cell in self.row(i):
-                if cell == EMPTY:
-                    return True
+            if EMPTY in [cell.player for cell in self.row(i)]:
+                return True
         return False
 
     @staticmethod
-    def _get_winner(cells: List[Types.CELL]) -> Optional[Types.CELL]:
-        winner = [*set(cells)]
+    def _get_winner(cells: List[Move]) -> Optional[Player]:
+        winner = [*set([cell.player for cell in cells])]
         if len(winner) == 1 and winner[0] != EMPTY:
             return winner[0]
+
+    @staticmethod
+    def _get_empty_field(size: int) -> List[List[Move]]:
+        return [[Move(x=row, y=column) for column in range(size)] for row in range(SIZE)]
 
 
 if __name__ == '__main__':
     game = TicTacToeGame()
     game.make_move(
-        player=Player.PLAYER_1,
         move=Move(
             x=0,
             y=0,
+            player=Player.PLAYER_1
         )
     )
     game.make_move(
