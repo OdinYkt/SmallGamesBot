@@ -5,7 +5,6 @@ from dataclasses import dataclass
 
 EMPTY = '_'
 SIZE = 3
-DRAW = 'DRAW'   #?
 
 
 class Player(Enum):
@@ -41,16 +40,3 @@ class WinResult:
 
 class Types:
     CELL = Union[Player, EMPTY]
-
-
-class WrongMoveException(Exception):
-    def __init__(self, player: Player, move: Move, reason: str):
-        self.reason = reason
-        self.player = player
-        self.move = move
-
-    def __str__(self):
-        return f"Wrong move! {self.reason} | {self.player} | {self.move}"
-
-    def __repr__(self):
-        return str(self)
