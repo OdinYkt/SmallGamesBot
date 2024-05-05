@@ -44,7 +44,7 @@ class TicTacToeGame:
         if move.x < 0 or move.y < 0 or move.x >= SIZE or move.y >= SIZE:
             raise OutOfFieldException(move=move)
 
-        if self.field[move.x][move.y].player != EMPTY:
+        if self.field[move.x][move.y].player != EMPTY.EMPTY:
             raise CellMarkedException(move=move)
         self.field[move.x][move.y] = move
 
@@ -84,49 +84,17 @@ class TicTacToeGame:
 
     def have_empty_cells(self) -> bool:
         for i in range(SIZE):
-            if EMPTY in [cell.player for cell in self.row(i)]:
+            if EMPTY.EMPTY in [cell.player for cell in self.row(i)]:
                 return True
         return False
 
     @staticmethod
     def _get_winner(cells: List[Move]) -> Optional[Player]:
         winner = [*set([cell.player for cell in cells])]
-        if len(winner) == 1 and winner[0] != EMPTY:
+        if len(winner) == 1 and winner[0] != EMPTY.EMPTY:
             return winner[0]
 
     @staticmethod
     def _get_empty_field(size: int) -> List[List[Move]]:
         return [[Move(x=row, y=column) for column in range(size)] for row in range(SIZE)]
 
-
-if __name__ == '__main__':
-    game = TicTacToeGame()
-    game.make_move(
-        move=Move(
-            x=0,
-            y=0,
-            player=Player.PLAYER_1
-        )
-    )
-    game.make_move(
-        player=Player.PLAYER_1,
-        move=Move(
-            x=0,
-            y=1,
-        )
-    )
-    game.make_move(
-        player=Player.PLAYER_1,
-        move=Move(
-            x=1,
-            y=0,
-        )
-    )
-    game.make_move(
-        player=Player.PLAYER_1,
-        move=Move(
-            x=2,
-            y=0,
-        )
-    )
-    print(game.winner)

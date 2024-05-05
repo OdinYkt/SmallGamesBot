@@ -9,10 +9,11 @@ from telegram.ext import (
 )
 
 from bot.common.constants import STATE
-from bot.common.utils import ONLY, Counter
+from bot.common.utils import ONLY, Counter, change_from_answer
 
+from .game import SINGLE, FRIEND, RANDOM, game_handler, empty_field
 
-SINGLE, RANDOM, FRIEND, RULES, BACK = Counter(5)
+RULES, BACK = Counter(2)
 
 
 async def tic_tac_toe_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
@@ -31,8 +32,8 @@ async def tic_tac_toe_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     ]
     markup = InlineKeyboardMarkup(buttons)
 
-    await update.callback_query.answer()
     await update.effective_user.send_message(text=text, reply_markup=markup)
+    await change_from_answer(update, new_text="Крестики-Нолики")
 
     return STATE.TIK_TAC_TOE
 
@@ -42,8 +43,8 @@ async def single_play(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str
         "Одиночная игра в крестики-нолики"
     )
 
-    await update.callback_query.answer()
-    await update.effective_user.send_message(text=text)
+    await update.effective_user.send_message(text=text, reply_markup=empty_field)
+    await change_from_answer(update, new_text="Одиночная")
 
     return SINGLE
 
@@ -53,8 +54,8 @@ async def friend_play(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str
         "Игра с друзьями. В разработке.."
     )
 
-    await update.callback_query.answer()
     await update.effective_user.send_message(text=text)
+    await change_from_answer(update, new_text="Игра с друзьями")
 
     return STATE.TIK_TAC_TOE
 
@@ -64,8 +65,8 @@ async def rules(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         "Правила. В разработке.."
     )
 
-    await update.callback_query.answer()
     await update.effective_user.send_message(text=text)
+    await change_from_answer(update)
 
     return STATE.TIK_TAC_TOE
 
@@ -77,9 +78,9 @@ tic_tac_toe_handler = ConversationHandler(
             CallbackQueryHandler(friend_play,  pattern=ONLY(FRIEND)),
             CallbackQueryHandler(rules,  pattern=ONLY(RULES)),
         ],
-        SINGLE: ...,
-        FRIEND: ...,
-        RULES: ...,
+        SINGLE: [game_handler],
+        # FRIEND: ...,
+        # RULES: ...,
 
     },
     fallbacks=[]

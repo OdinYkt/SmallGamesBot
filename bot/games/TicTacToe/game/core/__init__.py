@@ -1,5 +1,5 @@
 from .game import TicTacToeGame
-from .constants import Player, WinResult, Direction, Move, DrawResult
+from .constants import Player, WinResult, Direction, Move, DrawResult, GAME_RESULT, EMPTY, SIZE
 from .exceptions import OutOfFieldException, CellMarkedException
 
 __all__ = [
@@ -10,5 +10,8 @@ __all__ = [
     'Direction',
     'OutOfFieldException',
     'CellMarkedException',
-    'DrawResult'
+    'DrawResult',
+    'GAME_RESULT',
+    'EMPTY',
+    'SIZE',
 ]

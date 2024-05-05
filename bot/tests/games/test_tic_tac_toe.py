@@ -1,7 +1,7 @@
 import pytest
 from typing import Tuple, List
 
-from bot.games.TicTacToe.core import TicTacToeGame, Player, WinResult, Move, Direction, DrawResult
+from bot.games.TicTacToe.game.core import TicTacToeGame, Player, WinResult, Move, Direction, DrawResult, GAME_RESULT
 
 
 def get_moves(move_coordinates: Tuple[Tuple[int, int], ...], player: Player) -> List[Move]:
@@ -46,7 +46,7 @@ def test_empty_game(game):
         (WIN_MOVES[3], WinResult(winner=Player.PLAYER_1, direction=Direction.diagonal_right_left, cells=WIN_MOVES[3])),
     ]
 )
-def test_win_condition(game, all_moves: List[Move], expected_result: WinResult):
+def test_win_condition(game, all_moves: List[Move], expected_result: GAME_RESULT):
     for move in all_moves:
         game.make_move(move)
     assert game.get_result() == expected_result, "Wrong expected result!"
@@ -58,7 +58,7 @@ def test_win_condition(game, all_moves: List[Move], expected_result: WinResult):
         (DRAW_MOVES[0], DrawResult()),
     ]
 )
-def test_draw_condition(game, all_moves: List[Move], expected_result: WinResult):
+def test_draw_condition(game, all_moves: List[Move], expected_result: GAME_RESULT):
     for move in all_moves:
         game.make_move(move)
     assert game.get_result() == expected_result, "Wrong expected result!"

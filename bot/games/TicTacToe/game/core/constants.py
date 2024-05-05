@@ -1,9 +1,12 @@
 from enum import Enum
-from typing import Union, Optional, List
+from typing import Union, List
 from dataclasses import dataclass
 
 
-EMPTY: str = '_'
+class EMPTY(Enum):
+    EMPTY: str = ' '
+
+
 SIZE = 3
 
 
@@ -18,14 +21,11 @@ class Player(Enum):
         return str(self)
 
 
-CELL = Union[Player, EMPTY]
-
-
 @dataclass
 class Move:
     x: int
     y: int
-    player: CELL = EMPTY
+    player: Union[Player, EMPTY] = EMPTY.EMPTY
 
     def __str__(self) -> str:
         return f"'{self.player}'"
