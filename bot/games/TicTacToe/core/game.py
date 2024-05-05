@@ -1,6 +1,6 @@
 from typing import Optional, List
 
-from bot.games.TicTacToe.core.constants import (
+from .constants import (
     EMPTY,
     SIZE,
     Player,
@@ -8,7 +8,10 @@ from bot.games.TicTacToe.core.constants import (
     WinResult,
     Direction,
     Move,
-    WrongMoveException
+)
+from .exceptions import (
+    CellMarkedException,
+    OutOfFieldException,
 )
 
 
@@ -41,12 +44,10 @@ class TicTacToeGame:
 
     def make_move(self, player: Player, move: Move) -> None:
         if move.x < 0 or move.y < 0 or move.x >= SIZE or move.y >= SIZE:
-            raise WrongMoveException(player=player, move=move,
-                                     reason=f"Move coordinates out of field! Field size: {SIZE}")
+            raise OutOfFieldException(player=player, move=move)
 
         if self.field[move.x][move.y] != EMPTY:
-            raise WrongMoveException(player=player, move=move,
-                                     reason="Cell is already marked!")
+            raise CellMarkedException(player=player, move=move)
         self.field[move.x][move.y] = player
 
     @property

@@ -1,4 +1,5 @@
 from .game import TicTacToeGame
-from .constants import Player, WinResult, Direction, Move, WrongMoveException
+from .constants import Player, WinResult, Direction, Move
+from .exceptions import OutOfFieldException, CellMarkedException
 
-__all__ = ['Move', 'TicTacToeGame', 'Player', 'WinResult', 'Direction', 'WrongMoveException']
+__all__ = ['Move', 'TicTacToeGame', 'Player', 'WinResult', 'Direction', 'OutOfFieldException', 'CellMarkedException']
