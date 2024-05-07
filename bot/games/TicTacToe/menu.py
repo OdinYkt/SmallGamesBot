@@ -9,7 +9,7 @@ from telegram.ext import (
 )
 
 from bot.common.constants import STATE
-from bot.common.utils import ONLY, Counter, change_from_answer
+from bot.common.utils import ONLY, Counter, change_from_answer, split_to
 
 from .game import SINGLE, FRIEND, RANDOM, game_handler, empty_field
 
@@ -38,28 +38,6 @@ async def tic_tac_toe_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     return STATE.TIK_TAC_TOE
 
 
-async def single_play(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
-    text = (
-        "Одиночная игра в крестики-нолики"
-    )
-
-    await update.effective_user.send_message(text=text, reply_markup=empty_field)
-    await change_from_answer(update, new_text="Одиночная")
-
-    return SINGLE
-
-
-async def friend_play(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
-    text = (
-        "Игра с друзьями. В разработке.."
-    )
-
-    await update.effective_user.send_message(text=text)
-    await change_from_answer(update, new_text="Игра с друзьями")
-
-    return STATE.TIK_TAC_TOE
-
-
 async def rules(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     text = (
         "Правила. В разработке.."
@@ -74,11 +52,9 @@ tic_tac_toe_handler = ConversationHandler(
     entry_points=[CallbackQueryHandler(tic_tac_toe_menu, pattern=ONLY(STATE.TIK_TAC_TOE))],
     states={
         STATE.TIK_TAC_TOE: [
-            CallbackQueryHandler(single_play,  pattern=ONLY(SINGLE)),
-            CallbackQueryHandler(friend_play,  pattern=ONLY(FRIEND)),
+            game_handler,
             CallbackQueryHandler(rules,  pattern=ONLY(RULES)),
         ],
-        SINGLE: [game_handler],
         # FRIEND: ...,
         # RULES: ...,
 

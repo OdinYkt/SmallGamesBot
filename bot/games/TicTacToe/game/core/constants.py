@@ -2,9 +2,11 @@ from enum import Enum
 from typing import Union, List
 from dataclasses import dataclass
 
+from bot.common.dataclasses_ import Position
+
 
 class EMPTY(Enum):
-    EMPTY: str = ' '
+    EMPTY = ' '
 
 
 SIZE = 3
@@ -23,8 +25,7 @@ class Player(Enum):
 
 @dataclass
 class Move:
-    x: int
-    y: int
+    pos: Position
     player: Union[Player, EMPTY] = EMPTY.EMPTY
 
     def __str__(self) -> str:
@@ -57,3 +58,5 @@ class DrawResult:
 
 
 GAME_RESULT = Union[WinResult, DrawResult]
+
+EMPTY_FIELD = [[Move(pos=Position(x=row, y=column)) for column in range(SIZE)] for row in range(SIZE)]

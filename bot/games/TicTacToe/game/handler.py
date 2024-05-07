@@ -11,9 +11,10 @@ from telegram.ext import (
 from bot.common.utils import ONLY, ANY, Counter, change_from_answer
 
 from .constants import SINGLE, FIELD_CELLS, FIELD_KEYS
+from .GameManager import GameManager
 
 
-async def start_game(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def start_single_game(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     await update.callback_query.answer()
     print(FIELD_CELLS[update.callback_query.data])
 
@@ -23,7 +24,9 @@ async def single_game(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str
 
 
 game_handler = ConversationHandler(
-    entry_points=[CallbackQueryHandler(start_game, pattern=ANY(FIELD_KEYS))],
+    entry_points=[
+        CallbackQueryHandler(start_single_game, pattern=ANY(SINGLE))
+    ],
     states={
         SINGLE: [CallbackQueryHandler(single_game, pattern=ANY(FIELD_KEYS))]
     },

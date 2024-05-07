@@ -9,12 +9,6 @@ from bot.common.utils import Counter, split_to
 SINGLE, RANDOM, FRIEND = Counter(3)
 
 
-@dataclass
-class Position:
-    x: int
-    y: int
-
-
 FIELD_CELLS = {Counter.give_one(): Position(x=x, y=y) for x in range(SIZE) for y in range(SIZE)}
 
 FIELD_KEYS = FIELD_CELLS.keys()

@@ -1,4 +1,5 @@
 from typing import Optional, List, NoReturn
+from copy import deepcopy
 
 from .constants import (
     EMPTY,
@@ -9,6 +10,7 @@ from .constants import (
     Move,
     DrawResult,
     GAME_RESULT,
+    EMPTY_FIELD
 )
 from .exceptions import (
     CellMarkedException,
@@ -18,7 +20,7 @@ from .exceptions import (
 
 class TicTacToeGame:
     def __init__(self):
-        self.field = self._get_empty_field(SIZE)
+        self.field = deepcopy(EMPTY_FIELD)
         self._directions = {
             Direction.row: self.row,
             Direction.column: self.column,
@@ -41,12 +43,12 @@ class TicTacToeGame:
         return [row[SIZE - 1 - i] for i, row in enumerate(self.field)]
 
     def make_move(self, move: Move) -> Optional[NoReturn]:
-        if move.x < 0 or move.y < 0 or move.x >= SIZE or move.y >= SIZE:
+        if move.pos.x < 0 or move.pos.y < 0 or move.pos.x >= SIZE or move.pos.y >= SIZE:
             raise OutOfFieldException(move=move)
 
-        if self.field[move.x][move.y].player != EMPTY.EMPTY:
+        if self.field[move.pos.x][move.pos.y].player != EMPTY.EMPTY:
             raise CellMarkedException(move=move)
-        self.field[move.x][move.y] = move
+        self.field[move.pos.x][move.pos.y] = move
 
     def get_result(self) -> Optional[GAME_RESULT]:
         """Return result of game or None"""
@@ -93,8 +95,4 @@ class TicTacToeGame:
         winner = [*set([cell.player for cell in cells])]
         if len(winner) == 1 and winner[0] != EMPTY.EMPTY:
             return winner[0]
-
-    @staticmethod
-    def _get_empty_field(size: int) -> List[List[Move]]:
-        return [[Move(x=row, y=column) for column in range(size)] for row in range(SIZE)]
 
