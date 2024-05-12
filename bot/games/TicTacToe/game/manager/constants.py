@@ -7,7 +7,9 @@ from bot.common.utils import Counter, split_to
 
 
 SINGLE, RANDOM, FRIEND = Counter(3)
+GAME, = Counter()
 
+GAME_MANAGER = 'GAME_MANAGER'
 
 FIELD_CELLS = {Counter.give_one(): Position(x=x, y=y) for x in range(SIZE) for y in range(SIZE)}
 
